@@ -16,5 +16,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Map.createNewMap("Basic", 5,5);
+        System.out.println(Map.getMapString());
     }
 }
