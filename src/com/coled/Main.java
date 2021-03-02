@@ -21,9 +21,8 @@ public class Main {
         }
     }
 
-
-    public static void main(String[] args) {
-        try (BufferedReader br = new BufferedReader(new FileReader("src/com/coled/intro.txt"))) {
+    public static void printFile(String path){
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
                 System.out.println(Colors.RED + line + Colors.RESET);
@@ -31,6 +30,11 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static void main(String[] args) {
+        printFile("src/com/coled/intro.txt");
         new KeyListenerTester("Key Listener");
     }
 }
