@@ -3,7 +3,7 @@ package com.coled;
 public class Item {
     String name;
     int damage;
-    int hpc;
+    double hpc;
     int heal;
     String type;
 
@@ -13,7 +13,7 @@ public class Item {
      * @param damage damage of weapon
      * @param hpc hit percentage of weapon
      */
-    public Item(String name, int damage, int hpc){
+    public Item(String name, int damage, double hpc){
         this.name = name;
         this.damage = damage;
         this.hpc = hpc;
@@ -70,7 +70,7 @@ public class Item {
      * @return hpc of weapon
      * @throws IllegalCallerException if item does not have a hpc value
      */
-    public int getHpc() {
+    public double getHpc() {
         if(type.equals("w")) {
             return hpc;
         }else{
