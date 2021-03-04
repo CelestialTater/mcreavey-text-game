@@ -16,7 +16,10 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Map.createNewMap("Basic", 5,5);
+
+        //Below is a example for how to generate a map
+        Map.createNewMap("Basic", 20,20);
+        //To get the current frame of the map for printing, call this function
         System.out.println(Map.getMapString());
     }
 }

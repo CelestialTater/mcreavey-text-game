@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class Map {
     /*Ideas for map generation
-    Basic: Test ground for intial game
+    Basic: Test ground for initial game
     Plains: Mostly open field, some enemies
     Forest: Start with an open area, th3en populate with trees
     Dungeon: create multiple rooms and connect them
@@ -19,14 +19,16 @@ public class Map {
     Enemy list -> list of enemies to use for the given map
      */
 
+
+    //These variables store details about the CURRENT MAP. For this iteration of the game
+    //there is no plans for remembering previous maps for backtracking.
     public static LinkedList<Tile> currentMap;
-    public static String[][] currentMapSprites;
     public static int[] mapDimensions;
+    //TODO Add variables for player, enemies, and events present on current map.
 
     public static void createNewMap(String mapType, int xDir, int yDir){
         //set up for new map
         currentMap = new LinkedList<Tile>();
-        currentMapSprites = new String[yDir][xDir];
         mapDimensions = new int[] {xDir, yDir};
 
         switch (mapType.toLowerCase()){
@@ -45,9 +47,8 @@ public class Map {
 
         for(int y = 0; y < Map.mapDimensions[1]; y++){
             for(int x = 0; x < Map.mapDimensions[0]; x++){
-                v += Map.currentMapSprites[y][x];
+                v += Map.currentMap.get((y* mapDimensions[0])+x).getSprite();
             }
-            //TODO fix this statement, if necessary
             if(!(y+1 == Map.mapDimensions[1])){
                 v += "\n";
             }
@@ -60,12 +61,23 @@ public class Map {
 }
 
 class MapGeneration{
+
+    ///Basic: Debug map for testing
     public static void basic(){
         for(int y = 0; y < Map.mapDimensions[1]; y++){
             for(int x = 0; x < Map.mapDimensions[0];x++){
-                Grass v = new Grass();
-                Map.currentMap.add(v);
-                Map.currentMapSprites[y][x] = v.getSprite();
+                Map.currentMap.add(new Grass());
+            }
+        }
+        for(int y = 0; y < Map.mapDimensions[1]; y++){
+            if(y == 0 || y == Map.mapDimensions[1]-1){
+                for(int x = 0; x < Map.mapDimensions[0]; x++){
+                    Map.currentMap.set((y*Map.mapDimensions[0])+x, new Obstacle());
+                }
+            }
+            else{
+                Map.currentMap.set((y*Map.mapDimensions[0]), new Obstacle());
+                Map.currentMap.set(((y+1)*Map.mapDimensions[0])-1, new Obstacle());
             }
         }
     }
