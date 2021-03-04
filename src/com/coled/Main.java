@@ -44,10 +44,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        //Below is a example for how to generate a map
-        Map.createNewMap("Basic", 10,10);
-        //To get the current frame of the map for printing, call this function
-        System.out.println(Map.getMapString());
     }
 
 
@@ -55,7 +51,9 @@ public class Main {
         printFile("src/com/coled/intro.txt");
         new KeyListenerTester("Key Listener");
 
-        Item test = new Item("test", 12);
-        test.getDamage();
+        //Below is a example for how to generate a map
+        Map.createNewMap("Basic", 10,10);
+        //To get the current frame of the map for printing, call this function
+        System.out.println(Map.getMapString());
     }
 }
