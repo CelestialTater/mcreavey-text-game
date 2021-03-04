@@ -30,6 +30,11 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //Below is a example for how to generate a map
+        Map.createNewMap("Basic", 10,10);
+        //To get the current frame of the map for printing, call this function
+        System.out.println(Map.getMapString());
     }
 
 
