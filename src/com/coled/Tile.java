@@ -1,5 +1,10 @@
 package com.coled;
 
+/**
+ * Tile interface for all tiles
+ * Tiles should have:
+ * -A sprite
+ */
 public interface Tile {
 
     //The Tile interface is designed to allow for both map tiles and enemy tiles.
@@ -9,6 +14,10 @@ public interface Tile {
     String getSprite();
 }
 
+/**
+ * Implementation of a tile
+ * This tile isPassable, and has no special events
+ */
 class Grass implements Tile{
     String sprite = Colors.GREEN + "#" + Colors.RESET;
 
@@ -33,6 +42,10 @@ class Grass implements Tile{
     }
 }
 
+/**
+ * Implementation of a tile
+ * This Tile is impassable
+ */
 class Obstacle implements Tile{
     String sprite = Colors.RED + "#" + Colors.RESET;
 
