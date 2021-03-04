@@ -4,9 +4,16 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class Main {
 
+    public static LinkedList<Item> inventory;
+
+    /**
+     * Function to access keycodes from the key listener
+     * @param e key event
+     */
     public static void accessKeyCode(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -18,9 +25,15 @@ public class Main {
 
         }else if (key == KeyEvent.VK_RIGHT) {
 
+        }else if (key == KeyEvent.VK_E){
+
         }
     }
 
+    /**
+     * Prints a file line by line
+     * @param path file path
+     */
     public static void printFile(String path){
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
@@ -41,5 +54,8 @@ public class Main {
     public static void main(String[] args) {
         printFile("src/com/coled/intro.txt");
         new KeyListenerTester("Key Listener");
+
+        Item test = new Item("test", 12);
+        test.getDamage();
     }
 }
