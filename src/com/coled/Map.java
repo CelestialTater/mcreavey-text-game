@@ -1,6 +1,7 @@
 package com.coled;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Map {
     /*Ideas for map generation
@@ -25,6 +26,7 @@ public class Map {
     public static LinkedList<Tile> currentMap;
     public static int[] mapDimensions;
     public static LinkedList<Enemy> currentEnemies;
+    public static Random rand;
     //TODO Add variables for player, enemies, and events present on current map.
 
     /**
@@ -32,16 +34,24 @@ public class Map {
      * @param mapType What type of map to generate
      * @param xDir Width of the map
      * @param yDir Length of the map
+     * @param seed Seed to start with
      */
-    public static void createNewMap(String mapType, int xDir, int yDir){
+    public static void createNewMap(String mapType, int xDir, int yDir, int seed){
         //set up for new map
         currentMap = new LinkedList<Tile>();
         mapDimensions = new int[] {xDir, yDir};
         currentEnemies = new LinkedList<Enemy>();
+        rand = new Random(seed);
 
         switch (mapType.toLowerCase()){
             case "basic":
                 MapGeneration.basic();
+                break;
+            case "plains":
+                MapGeneration.plains();
+                break;
+            case "forest":
+                MapGeneration.forest();
                 break;
             default:
                 System.out.println("Abort!, this is not a valid map type: " + mapType);
@@ -103,5 +113,39 @@ class MapGeneration{
         //Place a sheep as close to the center as possible
         //Map.currentMap.add(new Sheep(Map.mapDimensions[0]/2, Map.mapDimensions[1]/2));
         Map.currentEnemies.add(new Sheep(Map.mapDimensions[0]/2, Map.mapDimensions[1]/2));
+    }
+
+    /**
+     * Plains generation
+     * Creates an open map, the populates with a few rocks/boulders.
+     */
+    public static void plains(){
+        //Setup grass
+        for(int y = 0; y < Map.mapDimensions[1]; y++){
+            for(int x = 0; x < Map.mapDimensions[0];x++){
+                Map.currentMap.add(new Grass());
+            }
+        }
+
+        //Setup random amounts of rocks
+        int rockCount = Map.rand.nextInt(Map.mapDimensions[0]*Map.mapDimensions[1]/5);
+        for(int i = 0; i < rockCount; i++){
+            int xPos = Map.rand.nextInt(Map.mapDimensions[0]);
+            int yPos = Map.rand.nextInt(Map.mapDimensions[1]);
+            Map.currentMap.set(Map.mapDimensions[0]*yPos+xPos, new Obstacle());
+        }
+
+        //Place an exit
+        int exitXPos = Map.rand.nextInt(Map.mapDimensions[0]);
+        int exitYPos = Map.rand.nextInt(Map.mapDimensions[1]);
+        Map.currentMap.set(Map.mapDimensions[0]*exitYPos+exitXPos, new Exit());
+    }
+
+    /**
+     * Forest generation.
+     * Creates an open map, then populates with trees
+     */
+    public static void forest(){
+
     }
 }
