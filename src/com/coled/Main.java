@@ -9,6 +9,22 @@ import java.util.LinkedList;
 public class Main {
 
     public static LinkedList<Item> inventory;
+    public static int playerHealth;
+
+    /**
+     * Prints an array to the console
+     * @param arr array to print
+     */
+    public static void printArrayString(String[] arr) {
+        for (String i : arr){System.out.print(i);}
+    }
+
+    /**
+     * Prints a series of newlines to the console to "clear" it.
+     */
+    public static void clearConsole() {
+        System.out.println(System.lineSeparator().repeat(50));
+    }
 
     /**
      * Function to access keycodes from the key listener
@@ -55,5 +71,10 @@ public class Main {
         Map.createNewMap("Basic", 10,10);
         //To get the current frame of the map for printing, call this function
         System.out.println(Map.getMapString());
+
+        Enemy test = new Sheep(0,0);
+        Battle battle = new Battle(5, test);
+        battle.battleInit();
+        battle.enemyAttack();
     }
 }
