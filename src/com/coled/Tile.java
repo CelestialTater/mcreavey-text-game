@@ -69,3 +69,30 @@ class Obstacle implements Tile{
         return sprite;
     }
 }
+
+/**
+ * Exit tile, should be present on every map
+ */
+class Exit implements  Tile {
+    String sprite = ".";
+
+    @Override
+    public boolean isPassable() {
+        return true;
+    }
+
+    @Override
+    public boolean isEvent() {
+        return true;
+    }
+
+    @Override
+    public String getEvent() {
+        return "Exit";
+    }
+
+    @Override
+    public String getSprite() {
+        return sprite;
+    }
+}
