@@ -66,10 +66,18 @@ public class Map {
             tilesToCopy.add(i);
         }
 
+        //Add enemies
         for(Enemy i : currentEnemies){
             tilesToCopy.set((i.getPosition()[1]*Map.mapDimensions[0])+i.getPosition()[0], i);
         }
 
+        //Add player
+        //TODO Clean up player Tile
+        tilesToCopy.set((Player.getPosition()[1])*mapDimensions[0]+Player.getPosition()[0], new Player());
+
+        //TODO implement event sprites
+
+        //Convert to string
         for(int y = 0; y < mapDimensions[1]; y++){
             for(int x = 0; x < mapDimensions[0]; x++){
                 v += tilesToCopy.get((y* mapDimensions[0])+x).getSprite();
@@ -79,11 +87,41 @@ public class Map {
             }
         }
 
-        //TODO implement enemies, player and event sprites
+
+
         return v;
+    }
+
+    /**
+     * Function to get a tile using two ints. Does not account for index counting
+     * @param xPos X co-ordinate + 1
+     * @param yPos Y co-ordinate + 1
+     * @param checkEnemies include enemy tiles
+     * @return the tile at the given position
+     */
+    public static Tile getTile(int xPos, int yPos, boolean checkEnemies){
+        if(checkEnemies){
+            for(Enemy i: currentEnemies){
+                if(i.getPosition()[0] == xPos && i.getPosition()[1] == yPos){
+                    return i;
+                }
+            }
+        }
+        return currentMap.get(yPos*mapDimensions[0]+xPos);
+    }
+
+    /**
+     * Function to set a tile easily. Does not account for index counting
+     * @param xPos X co-ordinate
+     * @param yPos Y co-ordinate
+     * @param tile Tile to set
+     */
+    public static void setTile(int xPos, int yPos, Tile tile){
+        Map.currentMap.set((yPos*Map.mapDimensions[0])+xPos, tile);
     }
 }
 
+//TODO Change to an interface?
 class MapGeneration{
 
     /**
@@ -101,18 +139,21 @@ class MapGeneration{
         for(int y = 0; y < Map.mapDimensions[1]; y++){
             if(y == 0 || y == Map.mapDimensions[1]-1){
                 for(int x = 0; x < Map.mapDimensions[0]; x++){
-                    Map.currentMap.set((y*Map.mapDimensions[0])+x, new Obstacle());
+                    Map.setTile(x, y, new Obstacle());
                 }
             }
             else{
-                Map.currentMap.set((y*Map.mapDimensions[0]), new Obstacle());
-                Map.currentMap.set(((y+1)*Map.mapDimensions[0])-1, new Obstacle());
+                Map.setTile(0, y, new Obstacle());
+                Map.setTile(Map.mapDimensions[0]-1, y, new Obstacle());
             }
         }
 
         //Place a sheep as close to the center as possible
         //Map.currentMap.add(new Sheep(Map.mapDimensions[0]/2, Map.mapDimensions[1]/2));
-        Map.currentEnemies.add(new Sheep(Map.mapDimensions[0]/2, Map.mapDimensions[1]/2));
+        Map.currentEnemies.add(new Sheep(Map.mapDimensions[0]/2-1, Map.mapDimensions[1]/2-1));
+
+        //Set player in the bottom left corner
+        Player.setPosition(2, 2);
     }
 
     /**
@@ -132,13 +173,15 @@ class MapGeneration{
         for(int i = 0; i < rockCount; i++){
             int xPos = Map.rand.nextInt(Map.mapDimensions[0]);
             int yPos = Map.rand.nextInt(Map.mapDimensions[1]);
-            Map.currentMap.set(Map.mapDimensions[0]*yPos+xPos, new Obstacle());
+            Map.setTile(xPos, yPos, new Obstacle());
         }
 
         //Place an exit
         int exitXPos = Map.rand.nextInt(Map.mapDimensions[0]);
         int exitYPos = Map.rand.nextInt(Map.mapDimensions[1]);
-        Map.currentMap.set(Map.mapDimensions[0]*exitYPos+exitXPos, new Exit());
+        Map.setTile(exitXPos, exitYPos, new Exit());
+
+        //TODO set player
     }
 
     /**
@@ -148,4 +191,7 @@ class MapGeneration{
     public static void forest(){
 
     }
+
+    //TODO create common player setup
+
 }
