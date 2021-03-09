@@ -26,6 +26,9 @@ public class Main {
         System.out.println(System.lineSeparator().repeat(50));
     }
 
+    //Use modes to determine what to do with player input
+    public static int currentMode = 0;
+
     /**
      * Function to access keycodes from the key listener
      * @param e key event
@@ -34,15 +37,21 @@ public class Main {
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_DOWN) {
-
+            Player.updatePosition("s");
         }else if (key == KeyEvent.VK_UP) {
-
+            Player.updatePosition("n");
         }else if (key == KeyEvent.VK_LEFT) {
-
+            Player.updatePosition("w");
         }else if (key == KeyEvent.VK_RIGHT) {
-
+            Player.updatePosition("e");
         }else if (key == KeyEvent.VK_E){
-
+            //TODO ?????
+        }
+        Tile standingTile = Map.getTile(Player.getPosition()[0], Player.getPosition()[1], true);
+        if(standingTile.isEvent()){
+            //Execute event....
+        }else {
+            System.out.println(Map.getMapString());
         }
     }
 
@@ -68,7 +77,7 @@ public class Main {
         new KeyListenerTester("Key Listener");
 
         //Below is a example for how to generate a map
-        Map.createNewMap("Basic", 10,10);
+        Map.createNewMap("Basic", 10,10, 0);
         //To get the current frame of the map for printing, call this function
         System.out.println(Map.getMapString());
 
