@@ -19,7 +19,7 @@ public interface Tile {
  * This tile isPassable, and has no special events
  */
 class Grass implements Tile{
-    String sprite = Colors.GREEN + "#" + Colors.RESET;
+    String sprite = Colors.GREEN + Colors.BGGREEN + "□" + Colors.RESET;
 
     @Override
     public boolean isPassable() {
@@ -47,7 +47,7 @@ class Grass implements Tile{
  * This Tile is impassable
  */
 class Obstacle implements Tile{
-    String sprite = Colors.RED + "#" + Colors.RESET;
+    String sprite = Colors.RED + "\uD83C\uDF32" + Colors.RESET;
 
     @Override
     public boolean isPassable() {
