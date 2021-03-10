@@ -1,23 +1,25 @@
 package com.coled;
 
 import java.util.LinkedList;
+import java.util.OptionalInt;
 import java.util.Random;
 
 public class Map {
     /*Ideas for map generation
-    Basic: Test ground for initial game
-    Plains: Mostly open field, some enemies
-    Forest: Start with an open area, th3en populate with trees
-    Dungeon: create multiple rooms and connect them
+    Basic: Test ground for initial game --Done
+    Plains: Mostly open field, some enemies --Done
+    Forest: Start with an open area, th3en populate with trees --Partially Done?
+    Dungeon: create multiple rooms and connect them --Might be impossible
     EX Mountain: Map with cliffs and possibly extend to volcano?
     EX Town: peaceful map that houses traders ect. to use Gold?
      */
 
     /*Possible parameters:
-    Dimensions(xDir yDir) -> specify how large the map is
-    Map type -> See above
-    Map level -> intrinsic value to determine difficulty of enemies + rewards
-    Enemy list -> list of enemies to use for the given map
+    Dimensions(xDir yDir) -> specify how large the map is --Done
+    Map type -> See above --Done
+    Seed -> Provides randomness
+    Map level -> intrinsic value to determine difficulty of enemies + rewards --???
+    Enemy list -> list of enemies to use for the given map --???
      */
 
 
@@ -36,12 +38,18 @@ public class Map {
      * @param yDir Length of the map
      * @param seed Seed to start with
      */
-    public static void createNewMap(String mapType, int xDir, int yDir, int seed){
+    public static void createNewMap(String mapType, int xDir, int yDir, OptionalInt seed){
         //set up for new map
         currentMap = new LinkedList<Tile>();
         mapDimensions = new int[] {xDir, yDir};
         currentEnemies = new LinkedList<Enemy>();
-        rand = new Random(seed);
+        if(seed.isPresent()){
+            rand = new Random(seed.getAsInt());
+        }else{
+            rand = new Random();
+        }
+
+
 
         switch (mapType.toLowerCase()){
             case "basic":

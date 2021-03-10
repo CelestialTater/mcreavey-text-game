@@ -4,7 +4,10 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.OptionalInt;
+import java.util.Scanner;
 
 public class Main {
 
@@ -74,10 +77,22 @@ public class Main {
 
     public static void main(String[] args) {
         printFile("src/com/coled/intro.txt");
+
+        //User input for seed
+        OptionalInt i;
+        System.out.println("Enter a seed number (Any none number will use a random seed)");
+        Scanner scan = new Scanner(System.in);
+        try{
+            i = OptionalInt.of(scan.nextInt());
+        }catch (InputMismatchException e){
+            System.out.println("Starting with a random seed...");
+            i = OptionalInt.empty();
+        }scan.close();
+
         new KeyListenerTester("Key Listener");
 
         //Below is a example for how to generate a map
-        Map.createNewMap("Basic", 10,10, 0);
+        Map.createNewMap("Basic", 10,10, i);
         //To get the current frame of the map for printing, call this function
         System.out.println(Map.getMapString());
 
