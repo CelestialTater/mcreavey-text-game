@@ -189,7 +189,67 @@ class MapGeneration{
      * Creates an open map, then populates with trees
      */
     public static void forest(){
+        //Setup grass
+        for(int y = 0; y < Map.mapDimensions[1]; y++){
+            for(int x = 0; x < Map.mapDimensions[0];x++){
+                Map.currentMap.add(new Grass());
+            }
+        }
 
+
+        //Create "seed trees"
+        int treeCount = Map.rand.nextInt(Map.mapDimensions[0]*Map.mapDimensions[1]/5 + 1);
+        int[][] treeLocations = new int[treeCount][2];
+        for(int i = 0; i < treeCount; i++){
+            int xPos = Map.rand.nextInt(Map.mapDimensions[0]);
+            int yPos = Map.rand.nextInt(Map.mapDimensions[1]);
+            Map.setTile(xPos, yPos, new Obstacle());
+            treeLocations[i] = new int[]{xPos, yPos};
+        }
+
+        //Add additional trees up to the max close by other trees
+        int treeMax = Map.mapDimensions[0]*Map.mapDimensions[1]/3+2;
+        for(int i = 0; i < treeMax; i++){
+            int chosenTree = Map.rand.nextInt(treeCount);
+            int[] position = treeLocations[chosenTree];
+            int treeAmount = Map.rand.nextInt(treeMax-i);
+            LinkedList<String> directions = new LinkedList<String>();
+            directions.add("n");
+            directions.add("s");
+            directions.add("e");
+            directions.add("w");
+            for(int x = 0; x < treeAmount; x++){
+                if(directions.size() == 0){
+                    break;
+                }
+                int directionToPick = Map.rand.nextInt(directions.size());
+                switch(directions.get(directionToPick)){
+                    case "n":
+                        position[1] -= 1;
+                        break;
+                    case "s":
+                        position[1] += 1;
+                        break;
+                    case "e":
+                        position[0] += 1;
+                        break;
+                    case "w":
+                        position[0] -= 1;
+                        break;
+                }
+                try{
+                    if(Map.getTile(position[0], position[1], false).isPassable()){
+                        Map.setTile(position[0], position[1], new Obstacle());
+                        i++;
+                        break;
+                    }
+                }catch(IndexOutOfBoundsException e){
+                    //do nothing...
+                }
+                directions.remove(directionToPick);
+            }
+        }
+        //TODO add player, enemies
     }
 
     //TODO create common player setup
