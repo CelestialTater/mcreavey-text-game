@@ -56,17 +56,23 @@ public class Map {
             default:
                 System.out.println("Abort!, this is not a valid map type: " + mapType);
         }
-
     }
 
+    /**
+     * Gets a string representation of the map
+     * @return the String representation of the map
+     */
     public static String getMapString(){
+        //Output variable
         String v = "";
+
+        //Copy all of the tiles in the original map into a placeholder
         LinkedList<Tile> tilesToCopy = new LinkedList<Tile>();
         for(Tile i : currentMap){
             tilesToCopy.add(i);
         }
 
-        //Add enemies
+        //Add enemies to placeholder
         for(Enemy i : currentEnemies){
             tilesToCopy.set((i.getPosition()[1]*Map.mapDimensions[0])+i.getPosition()[0], i);
         }
@@ -87,8 +93,7 @@ public class Map {
             }
         }
 
-
-
+        //return the string
         return v;
     }
 
