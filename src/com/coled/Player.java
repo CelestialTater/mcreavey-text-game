@@ -2,9 +2,14 @@ package com.coled;
 
 import com.coled.Tile;
 
+import java.util.LinkedList;
+
 public class Player implements Tile {
     private static int[] position = {0,0};
     private static String sprite = "A";
+    public static LinkedList<Item> inventory = new LinkedList<Item>();
+    public static int health = 10;
+    public static int maxHealth = 10;
 
     /**
      * Updates player position
@@ -55,6 +60,19 @@ public class Player implements Tile {
     public static int[] getPosition(){
         return position;
     }
+
+    public static void printInventory(boolean battle) {
+        if(battle) {
+            System.out.println();
+        }
+        System.out.println(Colors.CYAN + "Inventory: " + Colors.RESET);
+        for (Item i:inventory) {
+            System.out.print("[" + inventory.indexOf(i) + "] " + i.getName() + " ");
+        }
+        System.out.print("\n");
+    }
+
+
 
     //Tile methods
     @Override

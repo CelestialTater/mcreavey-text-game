@@ -9,6 +9,7 @@ package com.coled;
 public interface Enemy extends Tile {
     //Abstract class to house values for enemies
     //TODO evaluate whether we need all these methods...
+    Enemy getEnemy();
     boolean isHostile();
     String getSprite();
     String getName();
@@ -39,6 +40,11 @@ class Sheep implements Enemy {
         ypos = yPos;
     }
 
+
+    @Override
+    public Enemy getEnemy() {
+        return this;
+    }
 
     @Override
     public boolean isHostile() {

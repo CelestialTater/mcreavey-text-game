@@ -1,7 +1,6 @@
 package com.coled;
 
 public class Battle {
-    int playerHp;
     int enemyHp;
     int enemyDamage;
     int maxPlayerHp;
@@ -9,12 +8,10 @@ public class Battle {
     String enemyName;
     /**
      * Initialize a battle
-     * @param playerHp health of the player
      * @param enemy enemy object
      */
-    public Battle(int playerHp, Enemy enemy) {
-        this.playerHp = playerHp;
-        maxPlayerHp = playerHp;
+    public Battle(Enemy enemy) {
+        maxPlayerHp = Player.maxHealth;
         enemyHp = enemy.getHealth();
         maxEnemyHp = enemy.getHealth();
         enemyDamage = enemy.getAttack();
@@ -22,15 +19,18 @@ public class Battle {
     }
 
     public void battleInit(){
+        Main.clearConsole();
         System.out.println(enemyName + " appears!");
-        Main.printArrayString(getHealthBar(maxPlayerHp, playerHp, false));
+        Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
         System.out.print("     ");
         Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
-        //TODO: Print inventory selection
+        Player.printInventory(true);
     }
 
     public void battleEnd(){
         //Return to map, delete enemy from map
+        System.out.println("\nYou win!");
+        Main.mode = PlayerMode.MAP;
     }
 
     /**
@@ -41,9 +41,10 @@ public class Battle {
         if(weapon.getHpc() >= Math.random()) {
             enemyHp -= weapon.getDamage();
             Main.clearConsole();
-            Main.printArrayString(getHealthBar(maxPlayerHp, playerHp, false));
+            Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
             System.out.print("     ");
             Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
+            Player.printInventory(true);
             if(enemyHp <= 0){
                 battleEnd();
             }
@@ -57,18 +58,32 @@ public class Battle {
      * Attack the player. Enemy has a static hit change of 90%.
      */
     public void enemyAttack() {
-        if(0.9 >= Math.random()){
-            playerHp -= enemyDamage;
-            Main.clearConsole();
-            Main.printArrayString(getHealthBar(maxPlayerHp, playerHp, false));
-            System.out.print("     ");
-            Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
-            if(playerHp <= 0){
-                battleEnd();
+        if(enemyHp > 0) {
+            if(0.9 >= Math.random()){
+                Player.health -= enemyDamage;
+                Main.clearConsole();
+                Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
+                System.out.print("     ");
+                Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
+                Player.printInventory(true);
+                if(Player.health <= 0){
+                    battleEnd();
+                }
+            }else{
+                System.out.println("\nEnemy Miss!");
             }
-        }else{
-            System.out.println("\nEnemy Miss!");
         }
+    }
+
+    /**
+     * Updates the Battle Interface
+     */
+    public void update() {
+        Main.clearConsole();
+        Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
+        System.out.print("     ");
+        Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
+        Player.printInventory(true);
     }
 
     /**

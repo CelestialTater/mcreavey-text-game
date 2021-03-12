@@ -151,6 +151,7 @@ class MapGeneration{
         //Place a sheep as close to the center as possible
         //Map.currentMap.add(new Sheep(Map.mapDimensions[0]/2, Map.mapDimensions[1]/2));
         Map.currentEnemies.add(new Sheep(Map.mapDimensions[0]/2-1, Map.mapDimensions[1]/2-1));
+        Map.currentEnemies.add(new Sheep(2,4));
 
         //Set player in the bottom left corner
         Player.setPosition(2, 2);
