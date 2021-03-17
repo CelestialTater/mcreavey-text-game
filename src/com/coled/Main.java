@@ -13,6 +13,7 @@ public class Main {
 
     public static LinkedList<Item> inventory;
     public static int playerHealth;
+    static final String[] mapChoices = {"forest", "plains"};
 
     /**
      * Prints an array to the console
