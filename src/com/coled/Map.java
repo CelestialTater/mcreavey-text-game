@@ -49,8 +49,7 @@ public class Map {
             rand = new Random();
         }
 
-
-
+        //Based on mapType, generate that map
         switch (mapType.toLowerCase()){
             case "basic":
                 MapGeneration.basic();
@@ -64,6 +63,17 @@ public class Map {
             default:
                 System.out.println("Abort!, this is not a valid map type: " + mapType);
         }
+
+        //Set player position randomly
+        while(true){
+            int xPos = rand.nextInt(Map.mapDimensions[0]);
+            int yPos = rand.nextInt(Map.mapDimensions[1]);
+            Tile check = Map.getTile(xPos, yPos, true);
+            if(!check.isEvent() && check.isPassable()){
+                Player.setPosition(xPos+1, yPos+1);
+                break;
+            }
+        }
     }
 
     /**
@@ -75,10 +85,7 @@ public class Map {
         String v = "";
 
         //Copy all of the tiles in the original map into a placeholder
-        LinkedList<Tile> tilesToCopy = new LinkedList<Tile>();
-        for(Tile i : currentMap){
-            tilesToCopy.add(i);
-        }
+        LinkedList<Tile> tilesToCopy = new LinkedList<>(currentMap);
 
         //Add enemies to placeholder
         for(Enemy i : currentEnemies){
@@ -113,6 +120,10 @@ public class Map {
      * @return the tile at the given position
      */
     public static Tile getTile(int xPos, int yPos, boolean checkEnemies){
+        //If trying to access a tile not in the map, return an obstacle
+        if(xPos < 0 || xPos >= mapDimensions[0] || yPos < 0 || yPos >= mapDimensions[1]){
+            return new Obstacle();
+        }
         if(checkEnemies){
             for(Enemy i: currentEnemies){
                 if(i.getPosition()[0] == xPos && i.getPosition()[1] == yPos){
@@ -189,12 +200,8 @@ class MapGeneration{
             Map.setTile(xPos, yPos, new Obstacle());
         }
 
-        //Place an exit
-        int exitXPos = Map.rand.nextInt(Map.mapDimensions[0]);
-        int exitYPos = Map.rand.nextInt(Map.mapDimensions[1]);
-        Map.setTile(exitXPos, exitYPos, new Exit());
-
-        //TODO set player
+        //Place random exit
+        placeTileRandomly(new Exit());
     }
 
     /**
@@ -211,7 +218,7 @@ class MapGeneration{
 
 
         //Create "seed trees"
-        int treeCount = Map.rand.nextInt(Map.mapDimensions[0]*Map.mapDimensions[1]/5 + 1);
+        int treeCount = Map.rand.nextInt(Map.mapDimensions[0]*Map.mapDimensions[1]/5) + 1;
         int[][] treeLocations = new int[treeCount][2];
         for(int i = 0; i < treeCount; i++){
             int xPos = Map.rand.nextInt(Map.mapDimensions[0]);
@@ -226,7 +233,7 @@ class MapGeneration{
             int chosenTree = Map.rand.nextInt(treeCount);
             int[] position = treeLocations[chosenTree];
             int treeAmount = Map.rand.nextInt(treeMax-i);
-            LinkedList<String> directions = new LinkedList<String>();
+            LinkedList<String> directions = new LinkedList<>();
             directions.add("n");
             directions.add("s");
             directions.add("e");
@@ -262,7 +269,25 @@ class MapGeneration{
                 directions.remove(directionToPick);
             }
         }
-        //TODO add player, enemies
+        //Place random exit
+        placeTileRandomly(new Exit());
+    }
+
+    /**
+     * Places a specified tile in a random spot.
+     * Used for exits currently
+     * @param t Tile to place
+     */
+    public static int[] placeTileRandomly(Tile t){
+        while(true){
+            int xPos = Map.rand.nextInt(Map.mapDimensions[0]);
+            int yPos = Map.rand.nextInt(Map.mapDimensions[1]);
+            Tile check = Map.getTile(xPos, yPos, false);
+            if(check.isPassable() && !check.isEvent()){
+                Map.setTile(xPos, yPos, t);
+                return new int[] {xPos, yPos};
+            }
+        }
     }
 
     //TODO create common player setup

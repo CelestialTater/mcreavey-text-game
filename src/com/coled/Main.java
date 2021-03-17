@@ -52,7 +52,17 @@ public class Main {
         }
         Tile standingTile = Map.getTile(Player.getPosition()[0], Player.getPosition()[1], true);
         if(standingTile.isEvent()){
-            //Execute event....
+            switch(standingTile.getEvent().toLowerCase()){
+                case "battle":
+                    //ahhhh
+                    break;
+                case "exit":
+                    System.out.println("Making a new map...\n\n\n");
+                    Map.createNewMap(mapChoices[Map.rand.nextInt(mapChoices.length)], Map.mapDimensions[0],
+                            Map.mapDimensions[1], OptionalInt.of(Map.rand.nextInt()));
+                    System.out.println(Map.getMapString());
+                    break;
+            }
         }else {
             System.out.println(Map.getMapString());
         }

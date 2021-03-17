@@ -47,7 +47,7 @@ class Grass implements Tile{
  * This Tile is impassable
  */
 class Obstacle implements Tile{
-    String sprite = Colors.RED + "\uD83C\uDF32" + Colors.RESET;
+    String sprite = Colors.RED + Colors.BGGREEN + "\uD83C\uDF32" + Colors.RESET;
 
     @Override
     public boolean isPassable() {
