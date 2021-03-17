@@ -13,6 +13,7 @@ public interface Enemy extends Tile {
     boolean isHostile();
     String getSprite();
     String getName();
+    String getColor();
     int getHealth();
     int getAttack();
     int dealAttack(int[] modifiers);
@@ -29,6 +30,7 @@ class Sheep implements Enemy {
 
     private String sprite = "S";
     private String name = "Sheep";
+    private String color = "Yellow";
     private int maxHealth = 5;
     int currentHealth = 5;
     private int atk = 1;
@@ -74,6 +76,11 @@ class Sheep implements Enemy {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getColor() {
+        return color;
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.coled;
 
+import static com.coled.Main.clearConsole;
+
 public class Battle {
     int enemyHp;
     int enemyDamage;
     int maxPlayerHp;
     int maxEnemyHp;
     String enemyName;
+    String enemyColor;
     /**
      * Initialize a battle
      * @param enemy enemy object
@@ -16,10 +19,12 @@ public class Battle {
         maxEnemyHp = enemy.getHealth();
         enemyDamage = enemy.getAttack();
         enemyName = enemy.getName();
+        enemyColor = enemy.getColor();
     }
 
     public void battleInit(){
-        Main.clearConsole();
+        clearConsole();
+        Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
         System.out.println(enemyName + " appears!");
         Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
         System.out.print("     ");
@@ -40,7 +45,8 @@ public class Battle {
     public void attack(Item weapon) {
         if(weapon.getHpc() >= Math.random()) {
             enemyHp -= weapon.getDamage();
-            Main.clearConsole();
+            clearConsole();
+            Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
             Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
             System.out.print("     ");
             Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
@@ -61,7 +67,8 @@ public class Battle {
         if(enemyHp > 0) {
             if(0.9 >= Math.random()){
                 Player.health -= enemyDamage;
-                Main.clearConsole();
+                clearConsole();
+                Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
                 Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
                 System.out.print("     ");
                 Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
@@ -79,7 +86,8 @@ public class Battle {
      * Updates the Battle Interface
      */
     public void update() {
-        Main.clearConsole();
+        clearConsole();
+        Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
         Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
         System.out.print("     ");
         Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));

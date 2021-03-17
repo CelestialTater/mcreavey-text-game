@@ -198,12 +198,47 @@ public class Main {
     /**
      * Prints a file line by line
      * @param path file path
+     * @tag tag indicating portion of file to print
+     * @color color of text
      */
-    public static void printFile(String path){
+    public static void printFromFile(String path, String tag, String color){
+        boolean inTag = false;
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println(Colors.RED + line + Colors.RESET);
+                if(line.equals(tag)) {
+                    inTag = true;
+                    line = br.readLine();
+                }else if(line.equals(("!" + tag))){
+                    inTag = false;
+                }
+                if(inTag){
+                    switch (color) {
+                        case "Red":
+                            System.out.println(Colors.RED + line + Colors.RESET);
+                            break;
+                        case "Blue":
+                            System.out.println(Colors.BLUE + line + Colors.RESET);
+                            break;
+                        case "Green":
+                            System.out.println(Colors.GREEN + line + Colors.RESET);
+                            break;
+                        case "Purple":
+                            System.out.println(Colors.PURPLE + line + Colors.RESET);
+                            break;
+                        case "Yellow":
+                            System.out.println(Colors.YELLOW + line + Colors.RESET);
+                            break;
+                        case "Cyan":
+                            System.out.println(Colors.CYAN + line + Colors.RESET);
+                            break;
+                        case "White":
+                            System.out.println(Colors.WHITE + line + Colors.RESET);
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -213,7 +248,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        printFile("src/com/coled/intro.txt");
+        printFromFile("src/com/coled/art.txt", "intro", "red");
         new KeyListenerTester("Key Listener");
 
         //Below is a example for how to generate a map
