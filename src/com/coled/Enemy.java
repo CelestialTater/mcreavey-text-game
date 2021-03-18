@@ -18,6 +18,8 @@ public interface Enemy extends Tile {
     int getAttack();
     int dealAttack(int[] modifiers);
     int[] getPosition();
+    Item[] getDrops();
+    double getDropRate();
     void dealDamage(int dmg, int[] modifiers);
 }
 
@@ -36,6 +38,10 @@ class Sheep implements Enemy {
     private int atk = 1;
     private int xpos;
     private int ypos;
+    private Item mutton = new Item("Mutton",3);
+    private Item club = new Item("Club", 2, 0.7);
+    private Item[] drops = {mutton, club};
+    private double dropPc = 0.3;
 
     public Sheep(int xPos, int yPos){
         xpos = xPos;
@@ -101,6 +107,16 @@ class Sheep implements Enemy {
     @Override
     public int[] getPosition() {
         return new int[] {xpos, ypos};
+    }
+
+    @Override
+    public Item[] getDrops() {
+        return drops;
+    }
+
+    @Override
+    public double getDropRate() {
+        return dropPc;
     }
 
     @Override

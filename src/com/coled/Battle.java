@@ -9,6 +9,8 @@ public class Battle {
     int maxEnemyHp;
     String enemyName;
     String enemyColor;
+    Item[] enemyDrops;
+    double dropRate;
     /**
      * Initialize a battle
      * @param enemy enemy object
@@ -20,6 +22,8 @@ public class Battle {
         enemyDamage = enemy.getAttack();
         enemyName = enemy.getName();
         enemyColor = enemy.getColor();
+        enemyDrops = enemy.getDrops();
+        dropRate = enemy.getDropRate();
     }
 
     public void battleInit(){
@@ -32,10 +36,22 @@ public class Battle {
         Player.printInventory(true);
     }
 
-    public void battleEnd(){
+    public void battleEnd(boolean won){
         //Return to map, delete enemy from map
-        System.out.println("\nYou win!");
-        Main.mode = PlayerMode.MAP;
+        if(won) {
+            System.out.println("\nYou win!");
+            Main.mode = PlayerMode.MAP;
+            for(Item i : enemyDrops){
+                if(dropRate >= Math.random()){
+                    System.out.println(Colors.YELLOW + enemyName + Colors.RESET + " dropped: " + Colors.PURPLE + i.getName() + "!" + Colors.RESET);
+                    Player.inventory.add(i);
+                }
+            }
+            Main.sleep(1000);
+        }else{
+            //TODO: End game
+        }
+
     }
 
     /**
@@ -52,7 +68,7 @@ public class Battle {
             Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
             Player.printInventory(true);
             if(enemyHp <= 0){
-                battleEnd();
+                battleEnd(true);
             }
         }else{
             System.out.println("\nMiss!");
@@ -74,7 +90,7 @@ public class Battle {
                 Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
                 Player.printInventory(true);
                 if(Player.health <= 0){
-                    battleEnd();
+                    battleEnd(false);
                 }
             }else{
                 System.out.println("\nEnemy Miss!");

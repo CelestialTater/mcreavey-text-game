@@ -28,6 +28,15 @@ public class Main {
         System.out.println(System.lineSeparator().repeat(50));
     }
 
+    /**
+     * Sleep function
+     * @param millis millis to sleep for
+     */
+    public static void sleep(int millis) {
+        try{
+            Thread.sleep(millis);
+        }catch(InterruptedException e){ }
+    }
     //Use modes to determine what to do with player input
     public static PlayerMode mode = PlayerMode.MAP;
 
@@ -36,6 +45,7 @@ public class Main {
 
     /**
      * Function to access keycodes from the key listener
+     * Handles all input from the user
      * @param e key event
      */
     public static void accessKeyCode(KeyEvent e) {
@@ -129,9 +139,7 @@ public class Main {
                 }catch(IndexOutOfBoundsException e){ break; }
                 if(type == "w") {
                     battle.attack(Player.inventory.get(num));
-                    try{
-                        Thread.sleep(1000);
-                    }catch(InterruptedException e){ }
+                    sleep(1000);
                     battle.enemyAttack();
                 }else if(type == "h") {
                     if(Player.health != Player.maxHealth) {
@@ -142,10 +150,7 @@ public class Main {
                         Player.inventory.remove(num);
                         battle.update();
                         System.out.println("\nHealed!!");
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                        }
+                        sleep(1000);
                         battle.enemyAttack();
                     }else{
                         battle.update();
@@ -248,7 +253,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        printFromFile("src/com/coled/art.txt", "intro", "red");
+        printFromFile("src/com/coled/art.txt", "intro", "Red");
         new KeyListenerTester("Key Listener");
 
         //Below is a example for how to generate a map
