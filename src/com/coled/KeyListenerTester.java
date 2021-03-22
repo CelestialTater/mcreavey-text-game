@@ -31,7 +31,9 @@ public class KeyListenerTester extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Main.accessKeyCode(e);
+        if(Main.mode != PlayerMode.GAMEOVER) {
+            Main.accessKeyCode(e);
+        }
     }
 
 }

@@ -49,7 +49,10 @@ public class Battle {
             }
             Main.sleep(1000);
         }else{
-            //TODO: End game
+            Main.mode = PlayerMode.GAMEOVER;
+            Main.sleep(1000);
+            clearConsole();
+            Main.printFromFile("src/com/coled/art.txt", "GameOver", "Red");
         }
 
     }

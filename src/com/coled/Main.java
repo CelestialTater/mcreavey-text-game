@@ -101,7 +101,7 @@ public class Main {
         }else if (key == KeyEvent.VK_9){
             handleNumInput(9);
         }
-        Tile standingTile = Map.getTile(Player.getPosition()[0], Player.getPosition()[1], true);
+        Tile standingTile = Map.getTile(Player.getPosition()[0], Player.getPosition()[1], true, true);
         if(standingTile.isEvent() && mode != PlayerMode.BATTLE){
             //Execute event...."
             if(standingTile.getEvent().equalsIgnoreCase("Exit")){
@@ -122,6 +122,16 @@ public class Main {
                 battle.battleInit();
                 Map.currentEnemies.remove(Map.currentEnemies.indexOf(standingTile));
 
+            }else if(standingTile.getEvent().contains("Item")) {
+                String itemType = standingTile.getEvent().substring(5);
+                for(ItemTile i: Map.currentItems){
+                    if(i.getPosition()[0] == Player.getPosition()[0] && i.getPosition()[1] == Player.getPosition()[1]){
+                        Player.inventory.add(i.getItem());
+                        Map.currentItems.remove(Map.currentItems.indexOf(standingTile));
+                        System.out.println(Map.getMapString());
+                        System.out.println("Picked up a " + Colors.PURPLE + i.getItem().getName() + Colors.RESET + "!");
+                    }
+                }
             }
 
         }else if(mode == PlayerMode.MAP){

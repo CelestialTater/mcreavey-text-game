@@ -19,22 +19,22 @@ public class Player implements Tile {
         try {
             switch (direction.toLowerCase()) {
                 case "n":
-                    if (Map.getTile(position[0], position[1]-1, true).isPassable()) {
+                    if (Map.getTile(position[0], position[1]-1, true, true).isPassable()) {
                         position[1] -= 1;
                     }
                     break;
                 case "s":
-                    if (Map.getTile(position[0], position[1]+1, true).isPassable()) {
+                    if (Map.getTile(position[0], position[1]+1, true, true).isPassable()) {
                         position[1] += 1;
                     }
                     break;
                 case "e":
-                    if (Map.getTile(position[0]+1, position[1], true).isPassable()) {
+                    if (Map.getTile(position[0]+1, position[1], true, true).isPassable()) {
                         position[0] += 1;
                     }
                     break;
                 case "w":
-                    if (Map.getTile(position[0]-1, position[1], true).isPassable()) {
+                    if (Map.getTile(position[0]-1, position[1], true, true).isPassable()) {
                         position[0] -= 1;
                     }
                     break;
