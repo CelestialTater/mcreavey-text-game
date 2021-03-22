@@ -68,16 +68,6 @@ public class Map {
         LinkedList<Integer[]> valid = MapGeneration.validPlayerPositions();
         Integer[] tilePicked = valid.get(rand.nextInt(valid.size()));
         Player.setPosition(tilePicked[0]+1, tilePicked[1]+1);
-        /*
-        while(true){
-            int xPos = rand.nextInt(Map.mapDimensions[0]);
-            int yPos = rand.nextInt(Map.mapDimensions[1]);
-            Tile check = Map.getTile(xPos, yPos, true);
-            if(!check.isEvent() && check.isPassable()){
-                Player.setPosition(xPos+1, yPos+1);
-                break;
-            }
-        }*/
     }
 
     /**
@@ -295,7 +285,7 @@ class MapGeneration{
     }
 
     /**
-     * A function that returns all positions that a map is possible to complete from.
+     * A function that returns all positions a player can complete a map from
      * @return
      */
     public static LinkedList<Integer[]> validPlayerPositions(){
@@ -344,7 +334,7 @@ class MapGeneration{
             positions = new LinkedList<>();
             for(Integer[] i : buff){
                 if(i[0] == -1 || i[1] == -1 || i[0] >= Map.mapDimensions[0]-1 || i[1] >= Map.mapDimensions[1]
-                        || i.equals(checkedPositions[Map.mapDimensions[0]*i[1]+i[0]])){
+                        || checkedPositions[Map.mapDimensions[0]*i[1]+i[0]]){
                     continue;
                 }
                 positions.add(new Integer[]{i[0], i[1]});
