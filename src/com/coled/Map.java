@@ -65,6 +65,10 @@ public class Map {
         }
 
         //Set player position randomly
+        LinkedList<Integer[]> valid = MapGeneration.validPlayerPositions();
+        Integer[] tilePicked = valid.get(rand.nextInt(valid.size()));
+        Player.setPosition(tilePicked[0]+1, tilePicked[1]+1);
+        /*
         while(true){
             int xPos = rand.nextInt(Map.mapDimensions[0]);
             int yPos = rand.nextInt(Map.mapDimensions[1]);
@@ -73,7 +77,7 @@ public class Map {
                 Player.setPosition(xPos+1, yPos+1);
                 break;
             }
-        }
+        }*/
     }
 
     /**
@@ -290,6 +294,63 @@ class MapGeneration{
         }
     }
 
-    //TODO create common player setup
+    /**
+     * A function that returns all positions that a map is possible to complete from.
+     * @return
+     */
+    public static LinkedList<Integer[]> validPlayerPositions(){
+        LinkedList<Integer[]> validPositions = new LinkedList<>();
+        LinkedList<Integer[]> positions = new LinkedList<>();
 
+        for(Tile v : Map.currentMap){
+            if(v instanceof Exit){
+                int pos = Map.currentMap.indexOf(v);
+                int yPos = pos/Map.mapDimensions[0];
+                int xPos = pos%Map.mapDimensions[0];
+                positions.add(new Integer[]{xPos, yPos});
+            }
+        }
+
+        boolean[] checkedPositions = new boolean[Map.mapDimensions[0]*Map.mapDimensions[1]];
+        boolean a = true;
+
+        while(a){
+            a = false;
+            LinkedList<Integer[]> buff = new LinkedList<Integer[]>();
+            for(Integer[] i : positions){
+
+                //if Position already checked, skip it
+                if(checkedPositions[Map.mapDimensions[0]*i[1]+i[0]]){
+                    continue;
+                }
+                Tile t = Map.getTile(i[0], i[1], false);
+
+                //If the current tile is passable, then add the tiles surrounding it
+                if(t.isPassable()){
+                    buff.add(new Integer[]{i[0], i[1]+1});
+                    buff.add(new Integer[]{i[0], i[1]-1});
+                    buff.add(new Integer[]{i[0]+1, i[1]});
+                    buff.add(new Integer[]{i[0]-1, i[1]});
+                    //Tile must also be valid for player placement
+                    validPositions.add(i);
+                }
+
+                //Add it to checked positions
+                checkedPositions[Map.mapDimensions[0]*i[1]+i[0]] = true;
+            }
+            if(buff.size() > 0){
+                a = true;
+            }
+            positions = new LinkedList<>();
+            for(Integer[] i : buff){
+                if(i[0] == -1 || i[1] == -1 || i[0] >= Map.mapDimensions[0]-1 || i[1] >= Map.mapDimensions[1]
+                        || i.equals(checkedPositions[Map.mapDimensions[0]*i[1]+i[0]])){
+                    continue;
+                }
+                positions.add(new Integer[]{i[0], i[1]});
+            }
+        }
+
+        return validPositions;
+    }
 }
