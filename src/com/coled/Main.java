@@ -4,13 +4,18 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.OptionalInt;
+import java.util.Scanner;
 
 public class Main {
 
     public static LinkedList<Item> inventory;
     public static int playerHealth;
     public static boolean inInventory = false;
+    static final String[] mapChoices = {"forest", "plains"};
+
 
     /**
      * Prints an array to the console
@@ -106,6 +111,10 @@ public class Main {
             //Execute event...."
             if(standingTile.getEvent().equalsIgnoreCase("Exit")){
                 //Generate next floor/end game
+                System.out.println("Making a new map...\n\n\n");
+                Map.createNewMap(mapChoices[Map.rand.nextInt(mapChoices.length)], Map.mapDimensions[0],
+                Map.mapDimensions[1], OptionalInt.of(Map.rand.nextInt()));
+                System.out.println(Map.getMapString());
             }else if(standingTile.getEvent().contains("battle")){
                 String enemyType = standingTile.getEvent().substring(7);
                 Enemy enemy;
@@ -133,7 +142,6 @@ public class Main {
                     }
                 }
             }
-
         }else if(mode == PlayerMode.MAP){
             System.out.println(Map.getMapString());
         }
@@ -264,10 +272,22 @@ public class Main {
 
     public static void main(String[] args) {
         printFromFile("src/com/coled/art.txt", "intro", "Red");
+
+        //User input for seed
+        OptionalInt i;
+        System.out.println("Enter a seed number (Any none number will use a random seed)");
+        Scanner scan = new Scanner(System.in);
+        try{
+            i = OptionalInt.of(scan.nextInt());
+        }catch (InputMismatchException e){
+            System.out.println("Starting with a random seed...");
+            i = OptionalInt.empty();
+        }scan.close();
+
         new KeyListenerTester("Key Listener");
 
         //Below is a example for how to generate a map
-        Map.createNewMap("Basic", 10,10, 0);
+        Map.createNewMap("Basic", 10,10, i);
         //To get the current frame of the map for printing, call this function
         System.out.println(Map.getMapString());
         Item testItem = new Item("Sword",1,0.9);
