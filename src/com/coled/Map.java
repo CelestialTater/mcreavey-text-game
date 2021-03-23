@@ -269,7 +269,7 @@ class MapGeneration{
                         break;
                 }
                 try{
-                    if(Map.getTile(position[0], position[1], false).isPassable()){
+                    if(Map.getTile(position[0], position[1], false, false).isPassable()){
                         Map.setTile(position[0], position[1], new Obstacle());
                         i++;
                         break;
@@ -293,7 +293,7 @@ class MapGeneration{
         while(true){
             int xPos = Map.rand.nextInt(Map.mapDimensions[0]);
             int yPos = Map.rand.nextInt(Map.mapDimensions[1]);
-            Tile check = Map.getTile(xPos, yPos, false);
+            Tile check = Map.getTile(xPos, yPos, false, t.isPassable() ? false:true);
             if(check.isPassable() && !check.isEvent()){
                 Map.setTile(xPos, yPos, t);
                 return new int[] {xPos, yPos};
@@ -330,7 +330,7 @@ class MapGeneration{
                 if(checkedPositions[Map.mapDimensions[0]*i[1]+i[0]]){
                     continue;
                 }
-                Tile t = Map.getTile(i[0], i[1], false);
+                Tile t = Map.getTile(i[0], i[1], false, false);
 
                 //If the current tile is passable, then add the tiles surrounding it
                 if(t.isPassable()){
