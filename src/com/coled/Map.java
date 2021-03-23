@@ -53,7 +53,7 @@ public class Map {
         switch (mapType.toLowerCase()){
             case "basic":
                 MapGeneration.basic();
-                break;
+                return;
             case "plains":
                 MapGeneration.plains();
                 break;
