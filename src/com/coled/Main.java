@@ -116,27 +116,17 @@ public class Main {
                 Map.mapDimensions[1], OptionalInt.of(Map.rand.nextInt()));
                 System.out.println(Map.getMapString());
             }else if(standingTile.getEvent().contains("battle")){
-                String enemyType = standingTile.getEvent().substring(7);
-                Enemy enemy;
-                switch(enemyType){
-                    case "sheep":
-                        enemy = new Sheep(0,0);
-                        break;
-                    default:
-                        enemy = null;
-                        System.out.println(Colors.RED + "error: invalid enemytype. code probably crashes soon" + Colors.RESET);
-                }
                 mode = PlayerMode.BATTLE;
-                battle = new Battle(enemy);
+                battle = new Battle((Enemy) standingTile);
                 battle.battleInit();
-                Map.currentEnemies.remove(Map.currentEnemies.indexOf(standingTile));
+                Map.currentEnemies.remove(standingTile);
 
             }else if(standingTile.getEvent().contains("Item")) {
                 String itemType = standingTile.getEvent().substring(5);
                 for(ItemTile i: Map.currentItems){
                     if(i.getPosition()[0] == Player.getPosition()[0] && i.getPosition()[1] == Player.getPosition()[1]){
                         Player.inventory.add(i.getItem());
-                        Map.currentItems.remove(Map.currentItems.indexOf(standingTile));
+                        Map.currentItems.remove(standingTile);
                         System.out.println(Map.getMapString());
                         System.out.println("Picked up a " + Colors.PURPLE + i.getItem().getName() + Colors.RESET + "!");
                     }
@@ -221,8 +211,8 @@ public class Main {
     /**
      * Prints a file line by line
      * @param path file path
-     * @tag tag indicating portion of file to print
-     * @color color of text
+     * @param tag indicating portion of file to print
+     * @param color of text
      */
     public static void printFromFile(String path, String tag, String color){
         boolean inTag = false;

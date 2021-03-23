@@ -41,10 +41,10 @@ public class Map {
      */
     public static void createNewMap(String mapType, int xDir, int yDir, OptionalInt seed){
         //set up for new map
-        currentMap = new LinkedList<Tile>();
+        currentMap = new LinkedList<>();
         mapDimensions = new int[] {xDir, yDir};
-        currentEnemies = new LinkedList<Enemy>();
-        currentItems = new LinkedList<ItemTile>();
+        currentEnemies = new LinkedList<>();
+        currentItems = new LinkedList<>();
 
         if(seed.isPresent()){
             rand = new Random(seed.getAsInt());
@@ -187,6 +187,9 @@ class MapGeneration{
         Map.currentEnemies.add(new Sheep(2,4));
         Map.currentItems.add(new Potion(1,3));
 
+        //Place an SPOOKY skeleton
+        Map.currentEnemies.add(new Skeleton(9,9));
+
         //Set player in the bottom left corner
         Player.setPosition(2, 2);
     }
@@ -289,21 +292,20 @@ class MapGeneration{
      * Used for exits currently
      * @param t Tile to place
      */
-    public static int[] placeTileRandomly(Tile t){
+    public static void placeTileRandomly(Tile t){
         while(true){
             int xPos = Map.rand.nextInt(Map.mapDimensions[0]);
             int yPos = Map.rand.nextInt(Map.mapDimensions[1]);
-            Tile check = Map.getTile(xPos, yPos, false, t.isPassable() ? false:true);
+            Tile check = Map.getTile(xPos, yPos, t.isEvent(), t.isEvent());
             if(check.isPassable() && !check.isEvent()){
                 Map.setTile(xPos, yPos, t);
-                return new int[] {xPos, yPos};
             }
         }
     }
 
     /**
      * A function that returns all positions a player can complete a map from
-     * @return
+     * @return all valid player positions
      */
     public static LinkedList<Integer[]> validPlayerPositions(){
         LinkedList<Integer[]> validPositions = new LinkedList<>();
@@ -323,7 +325,7 @@ class MapGeneration{
 
         while(a){
             a = false;
-            LinkedList<Integer[]> buff = new LinkedList<Integer[]>();
+            LinkedList<Integer[]> buff = new LinkedList<>();
             for(Integer[] i : positions){
 
                 //if Position already checked, skip it
