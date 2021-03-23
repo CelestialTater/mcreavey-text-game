@@ -9,13 +9,17 @@ package com.coled;
 public interface Enemy extends Tile {
     //Abstract class to house values for enemies
     //TODO evaluate whether we need all these methods...
+    Enemy getEnemy();
     boolean isHostile();
     String getSprite();
     String getName();
+    String getColor();
     int getHealth();
     int getAttack();
     int dealAttack(int[] modifiers);
     int[] getPosition();
+    Item[] getDrops();
+    double getDropRate();
     void dealDamage(int dmg, int[] modifiers);
 }
 
@@ -28,17 +32,27 @@ class Sheep implements Enemy {
 
     private String sprite = "S";
     private String name = "Sheep";
+    private String color = "Yellow";
     private int maxHealth = 5;
     int currentHealth = 5;
     private int atk = 1;
     private int xpos;
     private int ypos;
+    private Item mutton = new Item("Mutton",3);
+    private Item club = new Item("Club", 2, 0.7);
+    private Item[] drops = {mutton, club};
+    private double dropPc = 0.3;
 
     public Sheep(int xPos, int yPos){
         xpos = xPos;
         ypos = yPos;
     }
 
+
+    @Override
+    public Enemy getEnemy() {
+        return this;
+    }
 
     @Override
     public boolean isHostile() {
@@ -71,6 +85,11 @@ class Sheep implements Enemy {
     }
 
     @Override
+    public String getColor() {
+        return color;
+    }
+
+    @Override
     public int getHealth() {
         return currentHealth;
     }
@@ -88,6 +107,16 @@ class Sheep implements Enemy {
     @Override
     public int[] getPosition() {
         return new int[] {xpos, ypos};
+    }
+
+    @Override
+    public Item[] getDrops() {
+        return drops;
+    }
+
+    @Override
+    public double getDropRate() {
+        return dropPc;
     }
 
     @Override

@@ -40,6 +40,12 @@ public class Item {
     }
 
     /**
+     * Get the type of an item
+     * @return string containing item type key.
+     */
+    public String getType() { return type; }
+
+    /**
      * Get the damage value of a weapon
      * @return damage of weapon
      * @throws IllegalCallerException if item does not have a damage value

@@ -1,36 +1,60 @@
 package com.coled;
 
+import static com.coled.Main.clearConsole;
+
 public class Battle {
-    int playerHp;
     int enemyHp;
     int enemyDamage;
     int maxPlayerHp;
     int maxEnemyHp;
     String enemyName;
+    String enemyColor;
+    Item[] enemyDrops;
+    double dropRate;
     /**
      * Initialize a battle
-     * @param playerHp health of the player
      * @param enemy enemy object
      */
-    public Battle(int playerHp, Enemy enemy) {
-        this.playerHp = playerHp;
-        maxPlayerHp = playerHp;
+    public Battle(Enemy enemy) {
+        maxPlayerHp = Player.maxHealth;
         enemyHp = enemy.getHealth();
         maxEnemyHp = enemy.getHealth();
         enemyDamage = enemy.getAttack();
         enemyName = enemy.getName();
+        enemyColor = enemy.getColor();
+        enemyDrops = enemy.getDrops();
+        dropRate = enemy.getDropRate();
     }
 
     public void battleInit(){
+        clearConsole();
+        Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
         System.out.println(enemyName + " appears!");
-        Main.printArrayString(getHealthBar(maxPlayerHp, playerHp, false));
+        Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
         System.out.print("     ");
         Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
-        //TODO: Print inventory selection
+        Player.printInventory(true);
     }
 
-    public void battleEnd(){
+    public void battleEnd(boolean won){
         //Return to map, delete enemy from map
+        if(won) {
+            System.out.println("\nYou win!");
+            Main.mode = PlayerMode.MAP;
+            for(Item i : enemyDrops){
+                if(dropRate >= Math.random()){
+                    System.out.println(Colors.YELLOW + enemyName + Colors.RESET + " dropped: " + Colors.PURPLE + i.getName() + "!" + Colors.RESET);
+                    Player.inventory.add(i);
+                }
+            }
+            Main.sleep(1000);
+        }else{
+            Main.mode = PlayerMode.GAMEOVER;
+            Main.sleep(1000);
+            clearConsole();
+            Main.printFromFile("src/com/coled/art.txt", "GameOver", "Red");
+        }
+
     }
 
     /**
@@ -40,12 +64,14 @@ public class Battle {
     public void attack(Item weapon) {
         if(weapon.getHpc() >= Math.random()) {
             enemyHp -= weapon.getDamage();
-            Main.clearConsole();
-            Main.printArrayString(getHealthBar(maxPlayerHp, playerHp, false));
+            clearConsole();
+            Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
+            Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
             System.out.print("     ");
             Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
+            Player.printInventory(true);
             if(enemyHp <= 0){
-                battleEnd();
+                battleEnd(true);
             }
         }else{
             System.out.println("\nMiss!");
@@ -57,18 +83,34 @@ public class Battle {
      * Attack the player. Enemy has a static hit change of 90%.
      */
     public void enemyAttack() {
-        if(0.9 >= Math.random()){
-            playerHp -= enemyDamage;
-            Main.clearConsole();
-            Main.printArrayString(getHealthBar(maxPlayerHp, playerHp, false));
-            System.out.print("     ");
-            Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
-            if(playerHp <= 0){
-                battleEnd();
+        if(enemyHp > 0) {
+            if(0.9 >= Math.random()){
+                Player.health -= enemyDamage;
+                clearConsole();
+                Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
+                Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
+                System.out.print("     ");
+                Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
+                Player.printInventory(true);
+                if(Player.health <= 0){
+                    battleEnd(false);
+                }
+            }else{
+                System.out.println("\nEnemy Miss!");
             }
-        }else{
-            System.out.println("\nEnemy Miss!");
         }
+    }
+
+    /**
+     * Updates the Battle Interface
+     */
+    public void update() {
+        clearConsole();
+        Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
+        Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
+        System.out.print("     ");
+        Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
+        Player.printInventory(true);
     }
 
     /**

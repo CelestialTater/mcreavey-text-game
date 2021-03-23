@@ -28,6 +28,7 @@ public class Map {
     public static LinkedList<Tile> currentMap;
     public static int[] mapDimensions;
     public static LinkedList<Enemy> currentEnemies;
+    public static LinkedList<ItemTile> currentItems;
     public static Random rand;
     //TODO Add variables for player, enemies, and events present on current map.
 
@@ -43,6 +44,8 @@ public class Map {
         currentMap = new LinkedList<Tile>();
         mapDimensions = new int[] {xDir, yDir};
         currentEnemies = new LinkedList<Enemy>();
+        currentItems = new LinkedList<ItemTile>();
+
         if(seed.isPresent()){
             rand = new Random(seed.getAsInt());
         }else{
@@ -86,6 +89,11 @@ public class Map {
             tilesToCopy.set((i.getPosition()[1]*Map.mapDimensions[0])+i.getPosition()[0], i);
         }
 
+        //Add items
+        for(ItemTile i : currentItems){
+            tilesToCopy.set((i.getPosition()[1]*Map.mapDimensions[0])+i.getPosition()[0], i);
+        }
+
         //Add player
         //TODO Clean up player Tile
         tilesToCopy.set((Player.getPosition()[1])*mapDimensions[0]+Player.getPosition()[0], new Player());
@@ -113,13 +121,20 @@ public class Map {
      * @param checkEnemies include enemy tiles
      * @return the tile at the given position
      */
-    public static Tile getTile(int xPos, int yPos, boolean checkEnemies){
+    public static Tile getTile(int xPos, int yPos, boolean checkEnemies, boolean checkItems){
         //If trying to access a tile not in the map, return an obstacle
         if(xPos < 0 || xPos >= mapDimensions[0] || yPos < 0 || yPos >= mapDimensions[1]){
             return new Obstacle();
         }
         if(checkEnemies){
             for(Enemy i: currentEnemies){
+                if(i.getPosition()[0] == xPos && i.getPosition()[1] == yPos){
+                    return i;
+                }
+            }
+        }
+        if(checkItems){
+            for(ItemTile i: currentItems){
                 if(i.getPosition()[0] == xPos && i.getPosition()[1] == yPos){
                     return i;
                 }
@@ -169,6 +184,8 @@ class MapGeneration{
         //Place a sheep as close to the center as possible
         //Map.currentMap.add(new Sheep(Map.mapDimensions[0]/2, Map.mapDimensions[1]/2));
         Map.currentEnemies.add(new Sheep(Map.mapDimensions[0]/2-1, Map.mapDimensions[1]/2-1));
+        Map.currentEnemies.add(new Sheep(2,4));
+        Map.currentItems.add(new Potion(1,3));
 
         //Set player in the bottom left corner
         Player.setPosition(2, 2);
