@@ -122,15 +122,10 @@ public class Main {
                 Map.currentEnemies.remove(standingTile);
 
             }else if(standingTile.getEvent().contains("Item")) {
-                String itemType = standingTile.getEvent().substring(5);
-                for(ItemTile i: Map.currentItems){
-                    if(i.getPosition()[0] == Player.getPosition()[0] && i.getPosition()[1] == Player.getPosition()[1]){
-                        Player.inventory.add(i.getItem());
-                        Map.currentItems.remove(standingTile);
-                        System.out.println(Map.getMapString());
-                        System.out.println("Picked up a " + Colors.PURPLE + i.getItem().getName() + Colors.RESET + "!");
-                    }
-                }
+                Player.inventory.add(((ItemTile) standingTile).getItem());
+                Map.currentItems.remove(standingTile);
+                System.out.println(Map.getMapString());
+                System.out.println("Picked up a " + Colors.PURPLE + ((ItemTile) standingTile).getItem().getName() + Colors.RESET + "!");
             }
         }else if(mode == PlayerMode.MAP){
             System.out.println(Map.getMapString());
