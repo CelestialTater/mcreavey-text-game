@@ -1,6 +1,8 @@
 package com.coled;
 
 
+import java.util.LinkedList;
+
 /**
  * Enemy interface
  * This interface defines common methods for all enemies and
@@ -15,12 +17,11 @@ public interface Enemy extends Tile {
     String getName();
     String getColor();
     int getHealth();
-    int getAttack();
-    int dealAttack(int[] modifiers);
+    int getDamage();
+    LinkedList<Object[]> getAttacks();
     int[] getPosition();
     Item[] getDrops();
     double getDropRate();
-    void dealDamage(int dmg, int[] modifiers);
 }
 
 /**
@@ -35,7 +36,8 @@ class Sheep implements Enemy {
     private String color = "Yellow";
     private int maxHealth = 5;
     int currentHealth = 5;
-    private int atk = 1;
+    private int dmg = 1;
+    private static LinkedList<Object[]> attacks = new LinkedList<>();
     private int xpos;
     private int ypos;
     private Item mutton = new Item("Mutton",3);
@@ -46,6 +48,8 @@ class Sheep implements Enemy {
     public Sheep(int xPos, int yPos){
         xpos = xPos;
         ypos = yPos;
+        attacks.add(new Object[]{"Kick", 1, 0.8});
+        attacks.add(new Object[]{"Bite", 2, 0.3});
     }
 
 
@@ -95,13 +99,13 @@ class Sheep implements Enemy {
     }
 
     @Override
-    public int getAttack() {
-        return atk;
+    public int getDamage() {
+        return dmg;
     }
 
     @Override
-    public int dealAttack(int[] modifiers) {
-        return 0;
+    public LinkedList<Object[]> getAttacks() {
+        return attacks;
     }
 
     @Override
@@ -119,8 +123,4 @@ class Sheep implements Enemy {
         return dropPc;
     }
 
-    @Override
-    public void dealDamage(int dmg, int[] modifiers) {
-        currentHealth -= dmg;
-    }
 }

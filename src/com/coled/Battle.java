@@ -1,5 +1,7 @@
 package com.coled;
 
+import java.util.LinkedList;
+
 import static com.coled.Main.clearConsole;
 
 public class Battle {
@@ -11,6 +13,7 @@ public class Battle {
     String enemyColor;
     Item[] enemyDrops;
     double dropRate;
+    LinkedList<Object[]> attacks;
     /**
      * Initialize a battle
      * @param enemy enemy object
@@ -19,13 +22,17 @@ public class Battle {
         maxPlayerHp = Player.maxHealth;
         enemyHp = enemy.getHealth();
         maxEnemyHp = enemy.getHealth();
-        enemyDamage = enemy.getAttack();
+        enemyDamage = enemy.getDamage();
         enemyName = enemy.getName();
         enemyColor = enemy.getColor();
         enemyDrops = enemy.getDrops();
         dropRate = enemy.getDropRate();
+        attacks = enemy.getAttacks();
     }
 
+    /**
+     * Initializes a battle by printing the interface.
+     */
     public void battleInit(){
         clearConsole();
         Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
@@ -36,6 +43,10 @@ public class Battle {
         Player.printInventory(true);
     }
 
+    /**
+     * Ends the battle by either returning to map or ending the game
+     * @param won whether the battle was won or not.
+     */
     public void battleEnd(boolean won){
         //Return to map, delete enemy from map
         if(won) {
@@ -49,6 +60,7 @@ public class Battle {
             }
             Main.sleep(1000);
         }else{
+            //If lost, end the game
             Main.mode = PlayerMode.GAMEOVER;
             Main.sleep(1000);
             clearConsole();
@@ -62,7 +74,9 @@ public class Battle {
      * @param weapon weapon used to attack the enemy
      */
     public void attack(Item weapon) {
+        //Check if weapon hits
         if(weapon.getHpc() >= Math.random()) {
+            //update enemyHP
             enemyHp -= weapon.getDamage();
             clearConsole();
             Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
@@ -70,6 +84,7 @@ public class Battle {
             System.out.print("     ");
             Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
             Player.printInventory(true);
+            //End battle if enemy dies
             if(enemyHp <= 0){
                 battleEnd(true);
             }
@@ -83,15 +98,22 @@ public class Battle {
      * Attack the player. Enemy has a static hit change of 90%.
      */
     public void enemyAttack() {
+        //Only attack if the enemy is alive
         if(enemyHp > 0) {
-            if(0.9 >= Math.random()){
-                Player.health -= enemyDamage;
+            //Pick a random attack
+            int attackNum = (int) (Math.random() * attacks.size());
+            //Check if the attack hits
+            if(((double) attacks.get(attackNum)[2]) >= Math.random()){
+                //Update health, update UI
+                Player.health -= (int) attacks.get(attackNum)[1];
                 clearConsole();
                 Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
                 Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
                 System.out.print("     ");
                 Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
+                System.out.println("\n" + Colors.PURPLE + enemyName + Colors.RESET + " used " + Colors.RED + attacks.get(attackNum)[0] + "!" + Colors.RESET);
                 Player.printInventory(true);
+                //End battle if player dies
                 if(Player.health <= 0){
                     battleEnd(false);
                 }

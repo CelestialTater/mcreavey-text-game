@@ -61,6 +61,10 @@ public class Player implements Tile {
         return position;
     }
 
+    /**
+     * Prints the player inventory
+     * @param battle whether the print occurs during a battle
+     */
     public static void printInventory(boolean battle) {
         if(battle) {
             System.out.println();

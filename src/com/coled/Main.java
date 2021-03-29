@@ -147,6 +147,10 @@ public class Main {
         }
     }
 
+    /**
+     * Handles number input depending on playerMode
+     * @param num number to handle
+     */
     public static void handleNumInput(int num) {
         String type;
         switch(mode) {
@@ -156,10 +160,12 @@ public class Main {
                     type = Player.inventory.get(num).getType();
                 }catch(IndexOutOfBoundsException e){ break; }
                 if(type == "w") {
+                    //Attack in battle with the selected weapon
                     battle.attack(Player.inventory.get(num));
                     sleep(1000);
                     battle.enemyAttack();
                 }else if(type == "h") {
+                    //Update health based on item used
                     if(Player.health != Player.maxHealth) {
                         Player.health += Player.inventory.get(num).getHeal();
                         if (Player.health >= Player.maxHealth) {
@@ -188,6 +194,7 @@ public class Main {
                     Player.printInventory(false);
                     System.out.println("\n" + Colors.PURPLE + Player.inventory.get(num).getName() + ":" + Colors.RESET + "\n" + Colors.YELLOW + "Damage: " + Colors.RESET + Player.inventory.get(num).getDamage() +"\n" + Colors.YELLOW + "Accuracy: " + Colors.RESET + Player.inventory.get(num).getHpc());
                 }else if(type == "h") {
+                    //Update health based on item used
                     if(Player.health != Player.maxHealth) {
                         int heal = Player.inventory.get(num).getHeal();
                         if ((Player.health + heal) >= Player.maxHealth) {
@@ -229,6 +236,7 @@ public class Main {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
+                //Only print while in the tag
                 if(line.equals(tag)) {
                     inTag = true;
                     line = br.readLine();
@@ -236,6 +244,7 @@ public class Main {
                     inTag = false;
                 }
                 if(inTag){
+                    //Color switch
                     switch (color) {
                         case "Red":
                             System.out.println(Colors.RED + line + Colors.RESET);
@@ -291,7 +300,7 @@ public class Main {
         //To get the current frame of the map for printing, call this function
         System.out.println(Map.getMapString());
         Item testItem = new Item("Sword",1,0.9);
-        Item testItem2 = new Item("Apple", 5);
+        Item testItem2 = new Item("Red Apple", 2);
         Player.inventory.add(testItem2);
         Player.inventory.add(testItem);
         inInventory = false;
