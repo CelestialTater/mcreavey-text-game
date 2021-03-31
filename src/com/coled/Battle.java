@@ -101,17 +101,17 @@ public class Battle {
         //Only attack if the enemy is alive
         if(enemyHp > 0) {
             //Pick a random attack
-            int attackNum = (int) (Math.random() * attacks.size());
+            Object[] attack = chooseEnemyAttack();
             //Check if the attack hits
-            if(((double) attacks.get(attackNum)[2]) >= Math.random()){
+            if(((double) attack[2]) >= Math.random()){
                 //Update health, update UI
-                Player.health -= (int) attacks.get(attackNum)[1];
+                Player.health -= (int) attack[1];
                 clearConsole();
                 Main.printFromFile("src/com/coled/art.txt", enemyName, enemyColor);
                 Main.printArrayString(getHealthBar(maxPlayerHp, Player.health, false));
                 System.out.print("     ");
                 Main.printArrayString(getHealthBar(maxEnemyHp, enemyHp, true));
-                System.out.println("\n" + Colors.PURPLE + enemyName + Colors.RESET + " used " + Colors.RED + attacks.get(attackNum)[0] + "!" + Colors.RESET);
+                System.out.println("\n" + Colors.PURPLE + enemyName + Colors.RESET + " used " + Colors.RED + attack[0] + "!" + Colors.RESET);
                 Player.printInventory(true);
                 //End battle if player dies
                 if(Player.health <= 0){
@@ -158,6 +158,21 @@ public class Battle {
         }
         bar[bar.length - 1] = ">";
         return bar;
+    }
+
+    /**
+     * Function to choose an enemy attack using a weight system
+     * @return object array of selected attack
+     */
+    public Object[] chooseEnemyAttack() {
+        LinkedList<Object[]> atkList = new LinkedList<>();
+        for(Object[] i : attacks) {
+            for(int c = 0; c < (int)i[3]; c++) {
+                atkList.add(i);
+            }
+        }
+        int attackNum = (int) (Math.random() * atkList.size());
+        return atkList.get(attackNum);
     }
 
 }

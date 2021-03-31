@@ -18,6 +18,7 @@ public interface Enemy extends Tile {
     String getColor();
     int getHealth();
     int getDamage();
+    //Attacks *MUST* follow this format: [String name, int damage, double hitPercent, int weight]
     LinkedList<Object[]> getAttacks();
     int[] getPosition();
     Item[] getDrops();
@@ -37,7 +38,7 @@ class Sheep implements Enemy {
     private int maxHealth = 5;
     int currentHealth = 5;
     private int dmg = 1;
-    private static LinkedList<Object[]> attacks = new LinkedList<>();
+    private LinkedList<Object[]> attacks = new LinkedList<>();
     private int xpos;
     private int ypos;
     private Item mutton = new Item("Mutton",3);
@@ -48,8 +49,8 @@ class Sheep implements Enemy {
     public Sheep(int xPos, int yPos){
         xpos = xPos;
         ypos = yPos;
-        attacks.add(new Object[]{"Kick", 1, 0.8});
-        attacks.add(new Object[]{"Bite", 2, 0.3});
+        attacks.add(new Object[]{"Kick", 1, 0.8, 5});
+        attacks.add(new Object[]{"Bite", 2, 0.3, 1});
     }
 
 
