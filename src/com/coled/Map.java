@@ -186,6 +186,7 @@ class MapGeneration{
         Map.currentEnemies.add(new Sheep(Map.mapDimensions[0]/2-1, Map.mapDimensions[1]/2-1));
         Map.currentEnemies.add(new Sheep(2,4));
         Map.currentItems.add(new RedApple(1,3));
+        Map.currentItems.add(new Chest(2,3));
 
         //Set player in the bottom left corner
         Player.setPosition(2, 2);

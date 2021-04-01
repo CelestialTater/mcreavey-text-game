@@ -23,6 +23,7 @@ public interface Enemy extends Tile {
     int[] getPosition();
     Item[] getDrops();
     double getDropRate();
+    int getGoldDrop();
 }
 
 /**
@@ -45,6 +46,7 @@ class Sheep implements Enemy {
     private Item club = new Item("Club", 2, 0.7);
     private Item[] drops = {mutton, club};
     private double dropPc = 0.3;
+    private int gold = 1;
 
     public Sheep(int xPos, int yPos){
         xpos = xPos;
@@ -122,6 +124,11 @@ class Sheep implements Enemy {
     @Override
     public double getDropRate() {
         return dropPc;
+    }
+
+    @Override
+    public int getGoldDrop() {
+        return gold;
     }
 
 }

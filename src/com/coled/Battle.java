@@ -9,6 +9,7 @@ public class Battle {
     int enemyDamage;
     int maxPlayerHp;
     int maxEnemyHp;
+    int goldDrop;
     String enemyName;
     String enemyColor;
     Item[] enemyDrops;
@@ -28,6 +29,7 @@ public class Battle {
         enemyDrops = enemy.getDrops();
         dropRate = enemy.getDropRate();
         attacks = enemy.getAttacks();
+        goldDrop = enemy.getGoldDrop();
     }
 
     /**
@@ -58,6 +60,8 @@ public class Battle {
                     Player.inventory.add(i);
                 }
             }
+            System.out.println(Colors.YELLOW + enemyName + Colors.RESET + " dropped: " + Colors.PURPLE + goldDrop + " gold!" + Colors.RESET);
+            Player.gold += goldDrop;
             Main.sleep(1000);
         }else{
             //If lost, end the game

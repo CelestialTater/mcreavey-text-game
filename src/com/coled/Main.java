@@ -5,14 +5,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.InputMismatchException;
-import java.util.LinkedList;
 import java.util.OptionalInt;
 import java.util.Scanner;
 
 public class Main {
 
-    public static LinkedList<Item> inventory;
-    public static int playerHealth;
     public static boolean inInventory = false;
     static final String[] mapChoices = {"forest", "plains"};
 
@@ -81,7 +78,6 @@ public class Main {
                 inInventory = true;
                 mode = PlayerMode.INVENTORY;
                 clearConsole();
-                System.out.println(Colors.RED + "Health: " + Colors.RESET + Player.health + "/" + Player.maxHealth);
                 Player.printInventory(false);
             }
 
@@ -132,7 +128,6 @@ public class Main {
                 Map.currentEnemies.remove(Map.currentEnemies.indexOf(standingTile));
 
             }else if(standingTile.getEvent().contains("Item")) {
-                String itemType = standingTile.getEvent().substring(5);
                 for(ItemTile i: Map.currentItems){
                     if(i.getPosition()[0] == Player.getPosition()[0] && i.getPosition()[1] == Player.getPosition()[1]){
                         Player.inventory.add(i.getItem());
@@ -140,6 +135,26 @@ public class Main {
                         System.out.println(Map.getMapString());
                         System.out.println("Picked up a " + Colors.PURPLE + i.getItem().getName() + Colors.RESET + "!");
                     }
+                }
+            }else if(standingTile.getEvent().equals("Chest")) {
+                Map.currentItems.remove(standingTile);
+                System.out.println(Map.getMapString());
+                int multiplier = Player.floor * 5;
+                int chestGold = (int) (Math.random() * multiplier + 1);
+                System.out.println("You found " + Colors.YELLOW + chestGold + " gold!" + Colors.RESET);
+                //TODO: Different items based on floor
+                switch (Player.floor) {
+                    case 1:
+                        Player.inventory.add(new Item("Broken Dagger", 2, 0.9));
+                        System.out.println("You found " + Colors.YELLOW + "Broken Dagger!" + Colors.RESET);
+                        break;
+                    case 2:
+                        Player.inventory.add(new Item("Shortsword", 4, 0.8));
+                        System.out.println("You found " + Colors.YELLOW + "Shortsword!" + Colors.RESET);
+                        break;
+                    default:
+                        System.out.println("The rest of the chest is empty...");
+                        break;
                 }
             }
         }else if(mode == PlayerMode.MAP){
@@ -159,12 +174,12 @@ public class Main {
                 try{
                     type = Player.inventory.get(num).getType();
                 }catch(IndexOutOfBoundsException e){ break; }
-                if(type == "w") {
+                if(type.equals("w")) {
                     //Attack in battle with the selected weapon
                     battle.attack(Player.inventory.get(num));
                     sleep(1000);
                     battle.enemyAttack();
-                }else if(type == "h") {
+                }else if(type.equals("h")) {
                     //Update health based on item used
                     if(Player.health != Player.maxHealth) {
                         Player.health += Player.inventory.get(num).getHeal();
@@ -187,13 +202,12 @@ public class Main {
                 try{
                     type = Player.inventory.get(num).getType();
                 }catch(IndexOutOfBoundsException e){ break; }
-                if(type == "w") {
+                if(type.equals("w")) {
                     //Print info
                     Main.clearConsole();
-                    System.out.println(Colors.RED + "Health: " + Colors.RESET + Player.health + "/" + Player.maxHealth);
                     Player.printInventory(false);
                     System.out.println("\n" + Colors.PURPLE + Player.inventory.get(num).getName() + ":" + Colors.RESET + "\n" + Colors.YELLOW + "Damage: " + Colors.RESET + Player.inventory.get(num).getDamage() +"\n" + Colors.YELLOW + "Accuracy: " + Colors.RESET + Player.inventory.get(num).getHpc());
-                }else if(type == "h") {
+                }else if(type.equals("h")) {
                     //Update health based on item used
                     if(Player.health != Player.maxHealth) {
                         int heal = Player.inventory.get(num).getHeal();
@@ -206,11 +220,9 @@ public class Main {
                         System.out.println("You used the " + Colors.PURPLE + Player.inventory.get(num).getName() + "!" + Colors.RESET);
                         System.out.println("You healed " + Colors.GREEN + heal + " health!" + Colors.RESET);
                         Player.inventory.remove(num);
-                        System.out.println(Colors.RED + "Health: " + Colors.RESET + Player.health + "/" + Player.maxHealth);
                         Player.printInventory(false);
                     }else{
                         clearConsole();
-                        System.out.println(Colors.RED + "Health: " + Colors.RESET + Player.health + "/" + Player.maxHealth);
                         Player.printInventory(false);
                         System.out.println(Colors.RED + "Can't heal at max health!" + Colors.RESET);
                     }
@@ -228,8 +240,8 @@ public class Main {
     /**
      * Prints a file line by line
      * @param path file path
-     * @tag tag indicating portion of file to print
-     * @color color of text
+     * @param tag tag indicating portion of file to print
+     * @param color color of text
      */
     public static void printFromFile(String path, String tag, String color){
         boolean inTag = false;

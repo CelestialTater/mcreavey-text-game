@@ -8,8 +8,10 @@ public class Player implements Tile {
     private static int[] position = {0,0};
     private static String sprite = "A";
     public static LinkedList<Item> inventory = new LinkedList<Item>();
+    public static int gold = 0;
     public static int health = 10;
     public static int maxHealth = 10;
+    public static int floor = 1;
 
     /**
      * Updates player position
@@ -68,12 +70,16 @@ public class Player implements Tile {
     public static void printInventory(boolean battle) {
         if(battle) {
             System.out.println();
+        }else{
+            System.out.println(Colors.RED + "Health: " + Colors.RESET + Player.health + "/" + Player.maxHealth);
+            System.out.println(Colors.YELLOW + "Gold: " + Colors.RESET + gold);
         }
         System.out.println(Colors.CYAN + "Inventory: " + Colors.RESET);
         for (Item i:inventory) {
             System.out.print("[" + inventory.indexOf(i) + "] " + i.getName() + " ");
         }
         System.out.print("\n");
+
     }
 
 

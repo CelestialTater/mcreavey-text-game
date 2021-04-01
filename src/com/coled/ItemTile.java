@@ -345,3 +345,40 @@ class Umbrella implements ItemTile {
         return "☂";
     }
 }
+class Chest implements ItemTile {
+    int xpos;
+    int ypos;
+    public Chest(int xPos, int yPos) {
+        xpos = xPos;
+        ypos = yPos;
+    }
+    @Override
+    public Item getItem() {
+        return null;
+    }
+
+    @Override
+    public int[] getPosition() {
+        return new int[] {xpos, ypos};
+    }
+
+    @Override
+    public boolean isPassable() {
+        return true;
+    }
+
+    @Override
+    public boolean isEvent() {
+        return true;
+    }
+
+    @Override
+    public String getEvent() {
+        return "Chest";
+    }
+
+    @Override
+    public String getSprite() {
+        return "\uD83D\uDDC4";
+    }
+}
